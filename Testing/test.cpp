@@ -177,9 +177,9 @@ TEST(HexMethod, Add_and_Subtract) {
 	}
 }
 TEST(HexMethod, Add_and_Subtract_exceptions) {
-	char test_1[] = "AA", test_2[] = "BB";
-	char* test_1_ptr = test_1, * test_2_ptr = test_2;
-	lab3::Hex a(test_1_ptr), b(test_2_ptr), c(25), d(test_1_ptr);
+	char test_1[] = "AA", test_2[] = "AA", test_3[] = "-AA";
+	char* test_1_ptr = test_1, * test_2_ptr = test_2, * test_3_ptr = test_3;
+	lab3::Hex a(test_1_ptr), b(test_2_ptr), c(25), d(test_1_ptr), k(test_3_ptr);
 
 	try {
 		EXPECT_ANY_THROW(c = a.add(b));
@@ -187,8 +187,9 @@ TEST(HexMethod, Add_and_Subtract_exceptions) {
 	catch (std::exception &ex) {
 		std::cout << ex.what() << std::endl;
 	}
+
 	try {
-		EXPECT_ANY_THROW(d = a.subtract(b));
+		EXPECT_ANY_THROW(d = k.subtract(b));
 	}
 	catch (std::exception& ex) {
 		std::cout << ex.what() << std::endl;
