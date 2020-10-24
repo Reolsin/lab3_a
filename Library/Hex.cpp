@@ -458,7 +458,8 @@ namespace lab3 {
 		return c;
 	}
 	Hex Hex::subtract(Hex b) const {
-		if (b.form_2[0] == '0') b.form_2[0] == '1'; else b.form_2[0] == '0';
+		b.hex[0] = '-';
+		b.set_forms();
 		return this->add(b);
 	}
 	int hex_to_int(char value) {
