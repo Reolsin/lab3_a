@@ -19,12 +19,14 @@ namespace lab3 {
 		//constructors
 		Hex();
 		Hex(char *hex_value);
-		Hex(long long int hex_value);
+		Hex(int hex_value);
 		//setters
-		Hex& input();
+		Hex& input(std::istream&);
+
 		Hex& shift_left(int n);
+
 		Hex& shift_right(int n, int condition=0);
-		
+
 
 		//getters
 		void getHex(char *) const;
@@ -33,15 +35,20 @@ namespace lab3 {
 		void get_form_2(char*) const;
 	
 		std::ostream & print(std::ostream&) const;
+
 		Hex add(Hex b) const;
+		Hex& operator +(Hex) const;
+
 		Hex subtract(Hex b) const;
+		Hex& operator -(Hex) const;
+
 		int comp(Hex b) const;
 		int is_even() const;
 	};
 	char int_to_hex(int value);
 	int hex_to_int(char value);
 	int hex_to_binary(char hex_value);
-	char int_to_hex(int value);
+	char binary_to_hex(int binary_value);
 }
 
 #endif
