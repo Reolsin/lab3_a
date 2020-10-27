@@ -3,23 +3,23 @@
 
 TEST(HexConstructor, DefaultConstructor) {
 	lab3::Hex a;
-	char outHex[12] , zeros[12] = "00000000000", outform_sm[42], outform_1[42], outform_2[42], zeros_1[42]="00000000000000000000000000000000000000000";
+	char outHex[3] , zeros[3] = "+0", outform_sm[5], outform_1[5], outform_2[5], zeros_1[5]="0000";
 	char* tmp_1 = outHex, *tmp_2=outform_sm, *tmp_3 = outform_1, *tmp_4 = outform_2;
 	a.getHex(tmp_1);
 	a.get_form_sm(tmp_2);
 	a.get_form_1(tmp_3);
 	a.get_form_2(tmp_4);
-	for (int i = 0; i < 11; i++) {
-		ASSERT_EQ(outHex[i], zeros[i]);
+	for (int i = 0; i < 2; i++) {
+		EXPECT_EQ(outHex[i], zeros[i]);
 	}
-	for (int i = 0; i < 41; i++) {
-		ASSERT_EQ(outform_sm[i], zeros_1[i]);
+	for (int i = 0; i < 4; i++) {
+		EXPECT_EQ(outform_sm[i], zeros_1[i]);
 	}
-	for (int i = 0; i < 41; i++) {
-		ASSERT_EQ(outform_1[i], zeros_1[i]);
+	for (int i = 0; i < 4; i++) {
+		EXPECT_EQ(outform_1[i], zeros_1[i]);
 	}
-	for (int i = 0; i < 41; i++) {
-		ASSERT_EQ(outform_2[i], zeros_1[i]);
+	for (int i = 0; i < 4; i++) {
+		EXPECT_EQ(outform_2[i], zeros_1[i]);
 	}
 }
 TEST(HexConstructor, InitialiserConstructor_positive_char) {
@@ -132,7 +132,7 @@ TEST(HexConstructor, InitialiserConstructor_exceptions_char_invalid_characters) 
 }
 TEST(HexConstructor, InitialiserConstructor_exceptions_int_overload_positive) {
 	try {
-		ASSERT_ANY_THROW(lab3::Hex a(99999999999999999));
+		ASSERT_ANY_THROW(lab3::Hex a(2147483648));
 	}
 	catch (std::exception& ex) {
 		std::cout << ex.what() << std::endl;
@@ -140,7 +140,7 @@ TEST(HexConstructor, InitialiserConstructor_exceptions_int_overload_positive) {
 }
 TEST(HexConstructor, InitialiserConstructor_exceptions_int_overload_negative) {
 	try {
-		ASSERT_ANY_THROW(lab3::Hex a(-99999999999999999));
+		ASSERT_ANY_THROW(lab3::Hex a(-2147483648));
 	}
 	catch (std::exception& ex) {
 		std::cout << ex.what() << std::endl;
@@ -211,12 +211,6 @@ TEST(HexMethod, Is_Even) {
 	k = a.is_even();
 	EXPECT_EQ(1, k);
 }
-
-
-
-
-
-
 
 
 
