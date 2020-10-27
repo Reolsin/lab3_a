@@ -7,21 +7,21 @@
 
 namespace lab3 {
 	Hex::Hex() {
-		len = SZ;
-		for (int i = 0; i < SZ+1; i++) {
-			hex[i] = '0';
-		}
-		for(int i=0;i<SZ*4+1; i++){
+		len = 1;
+	
+		hex[0] = '+';
+		hex[len] = '0';
+		for(int i=0;i<len*4; i++){
 			form_sm[i] = '0';
 			form_1[i] = '0';
 			form_2[i] = '0';
 		}
-		hex[SZ + 1] = '\0';
-		form_sm[SZ * 4 + 1] = '\0';
-		form_1[SZ*4 + 1] = '\0';
-		form_2[SZ*4 + 1] = '\0';
+		hex[len+1] = '\0';
+		form_sm[len*4+1] = '\0';
+		form_1[len*4+1] = '\0';
+		form_2[len*4+1] = '\0';
 	}
-	char int_to_hex(long long int value) {
+	char int_to_hex(int value) {
 		switch(value){
 		case 0:
 			return '0';
@@ -149,11 +149,12 @@ namespace lab3 {
 		}
 		return 0;
 	}
-	Hex::Hex(long long int hex_value) {
-		long long int tmp = hex_value;
-		long long int remainder=0;
+	Hex::Hex(int hex_value) {
+		 int tmp = hex_value;
+		 int remainder=0;
 		char fake_hex[SZ];
-		
+		if ((hex_value > 2147483647) || (hex_value < -2147483647))
+			throw std::exception("Too big of a number!");
 		len = 0;
 
 		if (hex_value >= 0) {
@@ -241,10 +242,10 @@ namespace lab3 {
 		}
 		set_forms();
 	}
-	Hex& Hex::input() {
+	Hex& Hex::input(std::istream& s) {
 		char input_s[80];
 		std::cout << "Input the hex number:" << std::endl;
-		std::cin >> input_s;
+		s >> input_s;
 		if (!std::cin.good())
 			throw std::exception("Invalid length of hex number!");
 		try {
@@ -252,7 +253,6 @@ namespace lab3 {
 		}
 		catch (std::exception& ex) {
 			std::cout << ex.what() << std::endl;
-			return *this;
 		} 
 		set_forms();
 		return *this;
@@ -335,6 +335,7 @@ namespace lab3 {
 
 		for (int i = 0; i < len*4+1; i++) {
 			form_1[i] = form_2[i];
+			form_sm[i] = form_2[i];
 		}
 
 		int i = 0;
@@ -400,16 +401,20 @@ namespace lab3 {
 
 		if (tmp.len > b.len) {
 			b = b.shift_right(tmp.len - b.len, 1);
-			i = tmp.len * 4;
+			i = tmp.len * 4+1;
+			c.len = tmp.len;
 		}
 		if (tmp.len < b.len) {
-			tmp.shift_right(b.len - tmp.len, 1);
-			i = b.len * 4;
+			tmp=tmp.shift_right(b.len - tmp.len, 1);
+			i = b.len * 4+1;
+			c.len = b.len;
 		}
-		if (tmp.len == b.len) i = tmp.len * 4;
+		if (tmp.len == b.len) { 
+			i = tmp.len * 4+1;
+			c.len = tmp.len;
+		}
 
 		int v_ume = 0;
-		
 		while (i >= 0) {
 			if ((tmp.form_2[i] == '1') && (b.form_2[i] == '1') && (v_ume == 1)) {
 				c.form_2[i] = '1';
@@ -445,15 +450,13 @@ namespace lab3 {
 				i--;
 				continue;
 			}
-
-
 			c.form_2[i] = '\0';
+			i--;
 		}
 		if ((tmp.form_2[0] == '0') && (b.form_2[0] == '0') && (c.form_2[0] == '1'))
 			throw std::exception("Overload detected!");
 		if ((tmp.form_2[0] == '1') && (b.form_2[0] == '1') && (c.form_2[0] == '0'))
 			throw std::exception("Overload detected!");
-
 		c.set_forms_backwards();
 		return c;
 	}
